@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sannyas — Sit. Observe. Disappear.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f1eb;
+    --bg2: #ede8e0;
+    --ink: #2a2621;
+    --ink-light: #6b6358;
+    --ink-faint: #a09488;
+    --green: #4a5c47;
+    --green-light: #6b7d68;
+    --rule: rgba(42,38,33,0.12);
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Jost', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.6;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 3rem;
+    mix-blend-mode: multiply;
+  }
+
+  .nav-logo {
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    font-weight: 400;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--ink); }
+
+  /* HERO */
+  #hero {
+    position: relative;
+    height: 100vh;
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 12vw;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: 
+      linear-gradient(to bottom, rgba(245,241,235,0.15) 0%, rgba(245,241,235,0.55) 100%),
+      url('https://images.unsplash.com/photo-1448375240586-882707db888b?w=1800&q=80&fit=crop') center/cover no-repeat;
+    filter: saturate(0.4) brightness(0.85);
+    z-index: 0;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 1.2s 0.3s ease forwards;
+  }
+
+  h1.hero-title {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 7vw, 6rem);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 1.2s 0.6s ease forwards;
+  }
+
+  .hero-sub {
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    color: var(--ink-light);
+    max-width: 380px;
+    line-height: 1.9;
+    margin-bottom: 3.5rem;
+    opacity: 0;
+    animation: fadeUp 1.2s 0.9s ease forwards;
+  }
+
+  .hero-cta {
+    opacity: 0;
+    animation: fadeUp 1.2s 1.2s ease forwards;
+  }
+
+  .btn-primary {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    border: 1px solid var(--ink);
+    font-family: var(--sans);
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    transition: background 0.4s, color 0.4s;
+    cursor: pointer;
+    background: transparent;
+  }
+
+  .btn-primary:hover {
+    background: var(--ink);
+    color: var(--bg);
+  }
+
+  .btn-secondary {
+    display: inline-block;
+    padding: 0.85rem 2rem;
+    border: 1px solid var(--ink-faint);
+    font-family: var(--sans);
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-light);
+    text-decoration: none;
+    transition: border-color 0.3s, color 0.3s;
+    cursor: pointer;
+    background: transparent;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    animation: fadeUp 1s 2s ease forwards;
+  }
+
+  .hero-scroll span {
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: var(--ink-faint);
+    animation: scrollPulse 2s infinite;
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 8rem 12vw;
+  }
+
+  .section-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 3rem;
+    display: block;
+  }
+
+  h2.section-title {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 300;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
+    margin-bottom: 2.5rem;
+    max-width: 620px;
+  }
+
+  h2.section-title em {
+    font-style: italic;
+    color: var(--ink-light);
+  }
+
+  .body-text {
+    font-size: 0.9rem;
+    color: var(--ink-light);
+    line-height: 1.95;
+    max-width: 520px;
+  }
+
+  .body-text p + p { margin-top: 1.2rem; }
+
+  hr.rule {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 0;
+  }
+
+  /* WHAT IS SANNYAS */
+  #what {
+    background: var(--bg);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .what-left { }
+
+  .what-right {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .pillar {
+    border-left: 1px solid var(--rule);
+    padding-left: 1.8rem;
+  }
+
+  .pillar-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 0.5rem;
+  }
+
+  .pillar-text {
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+
+  /* SILENCE / WHY */
+  #silence {
+    background: var(--bg2);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #silence h2 {
+    margin: 0 auto 2.5rem;
+  }
+
+  #silence .body-text {
+    margin: 0 auto;
+    text-align: left;
+  }
+
+  .silence-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+    margin-top: 5rem;
+    width: 100%;
+    text-align: left;
+  }
+
+  .silence-item { }
+
+  .silence-num {
+    font-family: var(--serif);
+    font-size: 3rem;
+    font-weight: 300;
+    color: var(--rule);
+    line-height: 1;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .silence-heading {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 0.75rem;
+  }
+
+  .silence-desc {
+    font-size: 0.85rem;
+    color: var(--ink-light);
+    line-height: 1.85;
+  }
+
+  /* RETREATS */
+  #retreats {
+    background: var(--bg);
+  }
+
+  .retreats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    margin-top: 4rem;
+  }
+
+  .retreat-card {
+    background: var(--bg2);
+    padding: 3.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.4s;
+  }
+
+  .retreat-card:hover { background: #e8e2d8; }
+
+  .retreat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 2px;
+    height: 0;
+    background: var(--green);
+    transition: height 0.5s ease;
+  }
+
+  .retreat-card:hover::before { height: 100%; }
+
+  .retreat-tag {
+    font-size: 0.58rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 1.5rem;
+  }
+
+  .retreat-name {
+    font-family: var(--serif);
+    font-size: 2rem;
+    font-weight: 300;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+  }
+
+  .retreat-desc {
+    font-size: 0.85rem;
+    color: var(--ink-light);
+    line-height: 1.85;
+    margin-bottom: 2.5rem;
+  }
+
+  .retreat-details {
+    list-style: none;
+    margin-bottom: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .retreat-details li {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .retreat-details li::before {
+    content: '—';
+    color: var(--rule);
+    font-size: 0.6rem;
+  }
+
+  /* EXPERIENCE */
+  #experience {
+    background: var(--bg2);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8rem;
+  }
+
+  .schedule {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 3rem;
+  }
+
+  .schedule-row {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 1.5rem;
+    padding: 1.2rem 0;
+    border-bottom: 1px solid var(--rule);
+    align-items: baseline;
+  }
+
+  .schedule-time {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .schedule-act {
+    font-size: 0.82rem;
+    color: var(--ink-light);
+  }
+
+  .experience-quote {
+    font-family: var(--serif);
+    font-size: clamp(1.4rem, 2.5vw, 2rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.55;
+    color: var(--ink-light);
+    border-left: 1px solid var(--rule);
+    padding-left: 2rem;
+    margin-top: 3rem;
+  }
+
+  /* BLNDFLD */
+  #blndfld {
+    background: var(--ink);
+    color: var(--bg);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  #blndfld .section-label { color: rgba(245,241,235,0.3); }
+  #blndfld h2.section-title { color: var(--bg); max-width: 600px; }
+  #blndfld h2.section-title em { color: rgba(245,241,235,0.5); }
+  #blndfld .body-text { color: rgba(245,241,235,0.55); }
+
+  .blndfld-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 4rem;
+    width: 100%;
+  }
+
+  .blndfld-item {
+    background: rgba(245,241,235,0.04);
+    padding: 2.5rem;
+    transition: background 0.3s;
+  }
+
+  .blndfld-item:hover { background: rgba(245,241,235,0.08); }
+
+  .blndfld-icon {
+    font-family: var(--serif);
+    font-size: 2.5rem;
+    font-weight: 300;
+    color: rgba(245,241,235,0.15);
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+
+  .blndfld-name {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(245,241,235,0.7);
+    margin-bottom: 0.75rem;
+  }
+
+  .blndfld-desc {
+    font-size: 0.82rem;
+    color: rgba(245,241,235,0.4);
+    line-height: 1.85;
+  }
+
+  #blndfld .btn-secondary {
+    border-color: rgba(245,241,235,0.25);
+    color: rgba(245,241,235,0.6);
+    margin-top: 3rem;
+  }
+
+  #blndfld .btn-secondary:hover {
+    border-color: rgba(245,241,235,0.7);
+    color: rgba(245,241,235,0.9);
+  }
+
+  /* LOCATIONS */
+  #locations {
+    background: var(--bg);
+  }
+
+  .locations-list {
+    margin-top: 4rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .location-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    align-items: center;
+    padding: 1.8rem 0;
+    border-bottom: 1px solid var(--rule);
+    transition: background 0.2s;
+    cursor: default;
+  }
+
+  .location-row:first-child { border-top: 1px solid var(--rule); }
+
+  .location-name {
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    font-weight: 300;
+  }
+
+  .location-region {
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .location-distance {
+    font-size: 0.75rem;
+    color: var(--green-light);
+    text-align: right;
+  }
+
+  /* WHO AM I */
+  #inquiry {
+    background: var(--bg2);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10rem 12vw;
+  }
+
+  .inquiry-questions {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    margin: 5rem 0;
+  }
+
+  .inquiry-q {
+    font-family: var(--serif);
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--ink-light);
+    line-height: 1.3;
+  }
+
+  .inquiry-divider {
+    width: 1px;
+    height: 3rem;
+    background: var(--rule);
+    margin: 0 auto;
+  }
+
+  .inquiry-closing {
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    color: var(--ink-faint);
+    max-width: 360px;
+    text-align: center;
+    line-height: 1.9;
+  }
+
+  /* VOLUNTEER */
+  #volunteer {
+    background: var(--bg);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8rem;
+    align-items: center;
+  }
+
+  .volunteer-values {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  .volunteer-value {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .volunteer-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    margin-top: 0.55rem;
+  }
+
+  .volunteer-value-text {
+    font-size: 0.85rem;
+    color: var(--ink-light);
+    line-height: 1.8;
+  }
+
+  /* FINAL CTA */
+  #cta {
+    background: var(--bg2);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10rem 12vw;
+  }
+
+  #cta h2 {
+    font-family: var(--serif);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.2;
+    max-width: 600px;
+    margin: 2rem auto 4rem;
+    color: var(--ink);
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(42,38,33,0.7);
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s;
+    padding: 2rem;
+  }
+
+  .modal-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal {
+    background: var(--bg);
+    max-width: 520px;
+    width: 100%;
+    padding: 3.5rem;
+    position: relative;
+    transform: translateY(20px);
+    transition: transform 0.4s;
+  }
+
+  .modal-overlay.active .modal { transform: translateY(0); }
+
+  .modal-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: var(--ink-faint);
+    line-height: 1;
+  }
+
+  .modal-eyebrow {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 1rem;
+  }
+
+  .modal-title {
+    font-family: var(--serif);
+    font-size: 1.8rem;
+    font-weight: 300;
+    margin-bottom: 2.5rem;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group label {
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--rule);
+    padding: 0.6rem 0;
+    font-family: var(--sans);
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.3s;
+    width: 100%;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    border-color: var(--ink-light);
+  }
+
+  .form-group textarea {
+    resize: none;
+    height: 90px;
+    line-height: 1.7;
+  }
+
+  .form-group select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23a09488'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.25rem center;
+    padding-right: 1.5rem;
+  }
+
+  .form-note {
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .form-success {
+    display: none;
+    text-align: center;
+    padding: 2rem 0;
+  }
+
+  .form-success p {
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--ink-light);
+    line-height: 1.6;
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 3rem 12vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--rule);
+  }
+
+  .footer-logo {
+    font-family: var(--serif);
+    font-size: 0.95rem;
+    font-weight: 400;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .footer-copy {
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-faint);
+  }
+
+  /* QUOTE PULL */
+  .pull-quote {
+    font-family: var(--serif);
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--ink-faint);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 2rem 0;
+    margin: 3rem 0;
+    max-width: 520px;
+    line-height: 1.6;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { transform: scaleY(1); opacity: 1; }
+    50% { transform: scaleY(0.6); opacity: 0.4; }
+  }
+
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 5rem 6vw; }
+    #hero { padding: 0 6vw; }
+    #what, #experience, #volunteer { grid-template-columns: 1fr; gap: 3rem; }
+    .retreats-grid { grid-template-columns: 1fr; }
+    .silence-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .blndfld-grid { grid-template-columns: 1fr; }
+    .location-row { grid-template-columns: 1fr 1fr; gap: 0.5rem 1rem; }
+    .location-distance { text-align: left; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+    .modal { padding: 2.5rem 1.5rem; }
+    #inquiry { padding: 6rem 6vw; }
+    #cta { padding: 6rem 6vw; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Sannyas</a>
+  <ul class="nav-links">
+    <li><a href="#retreats">Retreats</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#blndfld">Sessions</a></li>
+    <li><a href="#volunteer">Volunteer</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Silence &nbsp;·&nbsp; Inquiry &nbsp;·&nbsp; Transformation</p>
+    <h1 class="hero-title">Sit.<br>Observe.<br>Disappear.</h1>
+    <p class="hero-sub">A space for silence, self-inquiry, and inner transformation.</p>
+    <div class="hero-cta">
+      <a href="#retreats" class="btn-primary" onclick="openModal(event)">Apply for Retreat</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- WHAT IS SANNYAS -->
+<section id="what">
+  <div class="what-left fade-in">
+    <span class="section-label">01 &nbsp;—&nbsp; What is Sannyas</span>
+    <h2 class="section-title">Not religion.<br>Not escape.<br><em>A way of living<br>with awareness.</em></h2>
+    <p class="body-text">
+      Sannyas is a Sanskrit word meaning to let go — to renounce not the world, but the noise inside it.
+    </p>
+    <div class="pull-quote">
+      "The one who has learned to observe without reacting has learned the most difficult thing."
+    </div>
+    <p class="body-text">
+      This is not philosophy for the mind. It is practice for the body, the breath, the moment. What you do here, you carry nowhere — and that is the point.
+    </p>
+  </div>
+  <div class="what-right fade-in">
+    <div class="pillar">
+      <p class="pillar-label">Not this</p>
+      <p class="pillar-text">Not a retreat from life.<br>Not a temporary fix.<br>Not spiritual tourism.</p>
+    </div>
+    <div class="pillar">
+      <p class="pillar-label">But this</p>
+      <p class="pillar-text">A confrontation with what is.<br>A return to stillness.<br>A meeting with yourself.</p>
+    </div>
+    <div class="pillar">
+      <p class="pillar-label">The practice</p>
+      <p class="pillar-text">Breath. Body. Observation.<br>Silence. Repetition. Honesty.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- SILENCE -->
+<section id="silence">
+  <span class="section-label fade-in">02 &nbsp;—&nbsp; Why silence</span>
+  <h2 class="section-title fade-in">The mind does not stop.<br><em>But you can learn<br>to watch it.</em></h2>
+  <p class="body-text fade-in">
+    Inspired by Vipassana — one of the oldest meditation techniques — our retreats use silence as the primary instrument. Not as punishment. Not as restriction. As a mirror.
+  </p>
+  <div class="silence-grid">
+    <div class="silence-item fade-in">
+      <span class="silence-num">01</span>
+      <p class="silence-heading">The body knows first</p>
+      <p class="silence-desc">Sensation precedes thought. Every emotion lives in the body before the mind names it. Learning to observe sensation — without reaction — is the work.</p>
+    </div>
+    <div class="silence-item fade-in">
+      <span class="silence-num">02</span>
+      <p class="silence-heading">Breath as anchor</p>
+      <p class="silence-desc">The breath is always here. It does not belong to the past or future. Returning to it — thousands of times — trains the deepest part of attention.</p>
+    </div>
+    <div class="silence-item fade-in">
+      <span class="silence-num">03</span>
+      <p class="silence-heading">Why 10 days</p>
+      <p class="silence-desc">Change at this depth takes time. The first three days, the mind resists. By day five, something begins to soften. Day ten, you see what was always there.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- RETREATS -->
+<section id="retreats">
+  <span class="section-label fade-in">03 &nbsp;—&nbsp; Retreats</span>
+  <h2 class="section-title fade-in">Choose the depth<br><em>you are ready for.</em></h2>
+  <div class="retreats-grid">
+    <div class="retreat-card fade-in">
+      <p class="retreat-tag">Foundation</p>
+      <h3 class="retreat-name">3-Day<br>Intro Retreat</h3>
+      <p class="retreat-desc">An honest beginning. Designed not to impress, but to prepare. You will sit, breathe, observe. Little else.</p>
+      <ul class="retreat-details">
+        <li>Breath & body awareness</li>
+        <li>Partial silence</li>
+        <li>Evening inquiry sessions</li>
+        <li>Small group (8–12 people)</li>
+        <li>2–4 hrs from a major city</li>
+      </ul>
+      <a href="#" class="btn-secondary" onclick="openModal(event)">Apply — 3 Day</a>
+    </div>
+    <div class="retreat-card fade-in">
+      <p class="retreat-tag">Deep Practice</p>
+      <h3 class="retreat-name">10-Day<br>Silence Retreat</h3>
+      <p class="retreat-desc">Total silence. No phone. No performance. No escape. Just you, the breath, and what arises. This is the real work.</p>
+      <ul class="retreat-details">
+        <li>Noble silence for 10 days</li>
+        <li>No devices or reading</li>
+        <li>Vipassana-inspired technique</li>
+        <li>Basic, clean living conditions</li>
+        <li>Nature environment</li>
+      </ul>
+      <a href="#" class="btn-primary" onclick="openModal(event)">Apply — 10 Day</a>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="fade-in">
+    <span class="section-label">04 &nbsp;—&nbsp; The Experience</span>
+    <h2 class="section-title">Simple.<br>Disciplined.<br><em>Unchanged<br>for centuries.</em></h2>
+    <p class="body-text">
+      You will wake before the sun. You will sit for hours. The schedule is repetitive by design — because depth is only found in repetition, not novelty.
+    </p>
+    <p class="body-text" style="margin-top:1.2rem;">
+      The environment is nature. The food is simple. The company is silence. Nothing is designed to be comfortable. Everything is designed to be clear.
+    </p>
+    <blockquote class="experience-quote">
+      "You are not here for an experience.<br>You are here to see through the one who experiences."
+    </blockquote>
+  </div>
+  <div class="fade-in">
+    <div class="schedule">
+      <div class="schedule-row">
+        <span class="schedule-time">4:30</span>
+        <span class="schedule-act">Wake. No alarm twice.</span>
+      </div>
+      <div class="schedule-row">
+        <span class="schedule-time">4:45</span>
+        <span class="schedule-act">Morning sit — 2 hours</span>
+      </div>
+      <div class="schedule-row">
+        <span class="schedule-time">6:30</span>
+        <span class="schedule-act">Walking meditation</span>
+      </div>
+      <div class="schedule-row">
+        <span class="schedule-time">7:00</span>
+        <span class="schedule-act">Breakfast — eaten in silence</span>
+      </div>
+      <div class="schedule-row">
+        <span class="schedule-time">8:00</span>
+        <span class="schedule-act">Sit — 3 hours</span>
+      </div>
+      <div class="schedule-row">
+        <span class="schedule-time">11:00</span>
+        <span class="schedule-act">Lunch. Rest. Body scan.</span>
+      </div>
+      <div class="schedule-row">
+        <span class="schedule-time">13:00</span>
+        <span class="schedule-act">Sit — 2.5 hours</span>
+      </div>
+      <div class="schedule-row">
+        <span class="schedule-time">17:00</span>
+        <span class="schedule-act">Light meal</span>
+      </div>
+      <div class="schedule-row">
+        <span class="schedule-time">18:00</span>
+        <span class="schedule-act">Evening sit — 1.5 hours</span>
+      </div>
+      <div class="schedule-row">
+        <span class="schedule-time">20:00</span>
+        <span class="schedule-act">Discourse. Questions. Silence.</span>
+      </div>
+      <div class="schedule-row">
+        <span class="schedule-time">21:00</span>
+        <span class="schedule-act">Rest</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- BLNDFLD / SESSIONS -->
+<section id="blndfld">
+  <span class="section-label fade-in">05 &nbsp;—&nbsp; Sessions & Urban Work</span>
+  <h2 class="section-title fade-in">Not ready for<br>ten days?<br><em>Start here.</em></h2>
+  <p class="body-text fade-in">
+    BLNDFLD is where Sannyas meets the city. Shorter, sharper, designed to crack open the ordinary enough to ask a real question.
+  </p>
+  <div class="blndfld-grid">
+    <div class="blndfld-item fade-in">
+      <span class="blndfld-icon">◯</span>
+      <p class="blndfld-name">Blindfold Sessions</p>
+      <p class="blndfld-desc">90 minutes. Eyes covered. Attention turned entirely inward. The removal of sight makes everything else louder — and then quieter.</p>
+    </div>
+    <div class="blndfld-item fade-in">
+      <span class="blndfld-icon">∷</span>
+      <p class="blndfld-name">Philosophy Sessions</p>
+      <p class="blndfld-desc">Not lectures. Inquiry. Questions like: What is suffering? What is awareness? What is the self? Held in small groups. No answers given.</p>
+    </div>
+    <div class="blndfld-item fade-in">
+      <span class="blndfld-icon">◻</span>
+      <p class="blndfld-name">Urban Pop-Ups</p>
+      <p class="blndfld-desc">Short-format sessions brought into cities. One hour of silence inside the loudest environments. An introduction to what practice can be.</p>
+    </div>
+  </div>
+  <a href="#" class="btn-secondary">Attend a Session</a>
+</section>
+
+<!-- LOCATIONS -->
+<section id="locations">
+  <span class="section-label fade-in">06 &nbsp;—&nbsp; Where</span>
+  <h2 class="section-title fade-in">Far enough<br><em>to arrive.</em></h2>
+  <p class="body-text fade-in">
+    All retreat locations are chosen for what they remove — noise, convenience, distraction. Each is 2–4 hours from a major city. Close enough to reach. Far enough to matter.
+  </p>
+  <div class="locations-list fade-in">
+    <div class="location-row">
+      <span class="location-name">Coorg Forest</span>
+      <span class="location-region">Karnataka, India</span>
+      <span class="location-distance">4 hrs from Bengaluru</span>
+    </div>
+    <div class="location-row">
+      <span class="location-name">Spiti Valley</span>
+      <span class="location-region">Himachal Pradesh, India</span>
+      <span class="location-distance">8 hrs from Manali</span>
+    </div>
+    <div class="location-row">
+      <span class="location-name">Konkan Hillside</span>
+      <span class="location-region">Maharashtra, India</span>
+      <span class="location-distance">3 hrs from Mumbai</span>
+    </div>
+    <div class="location-row">
+      <span class="location-name">Aravalli Ridge</span>
+      <span class="location-region">Rajasthan, India</span>
+      <span class="location-distance">2 hrs from Jaipur</span>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- WHO AM I -->
+<section id="inquiry">
+  <span class="section-label fade-in">07 &nbsp;—&nbsp; The Inquiry</span>
+  <div class="inquiry-questions">
+    <p class="inquiry-q fade-in">Who am I beyond thought?</p>
+    <div class="inquiry-divider"></div>
+    <p class="inquiry-q fade-in">What is awareness, and who is aware?</p>
+    <div class="inquiry-divider"></div>
+    <p class="inquiry-q fade-in">What is suffering, and who suffers?</p>
+    <div class="inquiry-divider"></div>
+    <p class="inquiry-q fade-in">Is there a self — or only the story of one?</p>
+  </div>
+  <p class="inquiry-closing fade-in">
+    These are not questions to answer.<br>They are questions to live inside.
+  </p>
+</section>
+
+<hr class="rule">
+
+<!-- VOLUNTEER -->
+<section id="volunteer">
+  <div class="fade-in">
+    <span class="section-label">08 &nbsp;—&nbsp; Volunteer</span>
+    <h2 class="section-title">This grows through<br><em>contribution,<br>not transaction.</em></h2>
+    <p class="body-text">
+      Sannyas is not a service you purchase. It is a community that sustains itself through the people who believe in it. Volunteers are not helpers. They are practitioners who have chosen service as their practice.
+    </p>
+    <div style="margin-top:3rem;">
+      <a href="#" class="btn-secondary">Become a Volunteer</a>
+    </div>
+  </div>
+  <div class="volunteer-values fade-in">
+    <div class="volunteer-value">
+      <div class="volunteer-dot"></div>
+      <p class="volunteer-value-text">Help organize and run retreats — logistics, kitchen, setup, silence management.</p>
+    </div>
+    <div class="volunteer-value">
+      <div class="volunteer-dot"></div>
+      <p class="volunteer-value-text">Deepen your own practice by serving others who are beginning theirs.</p>
+    </div>
+    <div class="volunteer-value">
+      <div class="volunteer-dot"></div>
+      <p class="volunteer-value-text">No payment. Your presence, attention, and discipline are the contribution.</p>
+    </div>
+    <div class="volunteer-value">
+      <div class="volunteer-dot"></div>
+      <p class="volunteer-value-text">Minimum commitment: one retreat. Participants who have sat a 10-day are preferred.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- FINAL CTA -->
+<section id="cta">
+  <span class="section-label fade-in">Begin</span>
+  <h2 class="fade-in">Ready to sit<br>with yourself?</h2>
+  <a href="#" class="btn-primary fade-in" onclick="openModal(event)">Apply for Retreat</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">Sannyas</span>
+  <span class="footer-copy">Silence is the practice. © 2025</span>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <p class="modal-eyebrow">Application</p>
+    <h3 class="modal-title">Begin the process.</h3>
+    <div id="form-body">
+      <p class="form-note">This is not a booking. It is an application. We read each one. You will hear from us within a few days.</p>
+      <div class="form-group">
+        <label>Your name</label>
+        <input type="text" placeholder="As it appears on your ID">
+      </div>
+      <div class="form-group">
+        <label>Age</label>
+        <input type="number" placeholder="Must be 18 or older" min="18">
+      </div>
+      <div class="form-group">
+        <label>City you live in</label>
+        <input type="text" placeholder="City, Country">
+      </div>
+      <div class="form-group">
+        <label>Retreat</label>
+        <select>
+          <option value="">Select a retreat</option>
+          <option>10-Day Silence Retreat</option>
+          <option>3-Day Intro Retreat</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Why do you want to attend?</label>
+        <textarea placeholder="Write honestly. Short is fine."></textarea>
+      </div>
+      <button class="btn-primary" onclick="submitForm()" style="width:100%; text-align:center;">Submit Application</button>
+    </div>
+    <div class="form-success" id="form-success">
+      <p>Your application has been received.<br><br>Sit quietly.<br>We will be in touch.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Scroll fade-in
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+
+  // Stagger siblings
+  document.querySelectorAll('.silence-grid, .blndfld-grid, .retreats-grid').forEach(grid => {
+    grid.querySelectorAll('.fade-in').forEach((el, i) => {
+      el.style.transitionDelay = `${i * 0.12}s`;
+    });
+  });
+
+  // Modal
+  function openModal(e) {
+    if (e) e.preventDefault();
+    document.getElementById('modal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  document.getElementById('modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  function submitForm() {
+    document.getElementById('form-body').style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+  }
+
+  // Subtle parallax on hero
+  window.addEventListener('scroll', () => {
+    const hero = document.querySelector('.hero-bg');
+    const scrolled = window.scrollY;
+    if (hero && scrolled < window.innerHeight) {
+      hero.style.transform = `translateY(${scrolled * 0.3}px)`;
+    }
+  });
+</script>
+</body>
+</html>
